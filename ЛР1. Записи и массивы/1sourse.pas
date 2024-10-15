@@ -8,6 +8,7 @@ type
 		date_b: string; //мб позже расписать отдельно
 		number_person: string;
 		count_children: string;//yt nj
+		fio_children: string;
 		//children_fio: array of string;
 end;
 
@@ -25,6 +26,7 @@ begin
         readln(person.date_b);
         readln(person.number_person);
         readln(person.count_children);
+        readln(person.fio_children);
     
 		SetLength(data_out, i + 1); 
 		data_out[i] := person;     //сохранение человека в массив
@@ -39,6 +41,7 @@ begin
 		writeln('дата рождения: ', data_out[j].date_b);
 		writeln('номер удостоверения личности: ', data_out[j].number_person);
 		writeln('количество детей: ', data_out[j].count_children);
+		writeln('ФИО детей: ', data_out[j].fio_children);
 		writeln(i,'|', j);
 		k := k + 1;
 		writeln();
