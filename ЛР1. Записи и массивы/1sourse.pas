@@ -7,6 +7,8 @@ type
 		gender: string;
 		date_b: string; //мб позже расписать отдельно
 		number_person: string;
+		count_children: string;//yt nj
+		//children_fio: array of string;
 end;
 
 var
@@ -22,6 +24,7 @@ begin
         readln(person.gender);
         readln(person.date_b);
         readln(person.number_person);
+        readln(person.count_children);
     
 		SetLength(data_out, i + 1); 
 		data_out[i] := person;     //сохранение человека в массив
@@ -35,9 +38,9 @@ begin
 		writeln('пол: ', data_out[j].gender);
 		writeln('дата рождения: ', data_out[j].date_b);
 		writeln('номер удостоверения личности: ', data_out[j].number_person);
+		writeln('количество детей: ', data_out[j].count_children);
 		writeln(i,'|', j);
 		k := k + 1;
 		writeln();
 	end;
 end.
-//11.10-расписать отдельно дату
