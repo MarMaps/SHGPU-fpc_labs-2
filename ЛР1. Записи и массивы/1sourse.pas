@@ -1,21 +1,27 @@
-{$mode objfpc}
 program data_people;
+
+{$mode objfpc}
+Uses sysutils;
 
 type 
 	Tdata_people = record
 		fio: string;
 		gender: string;
-		date_b: string; //позже расписать отдельно
+		date_b: string;
+		date_day: integer;
+		date_month: integer;
+		date_year: integer;
 		id_person: string;
-		id_children: string;
+		fio_children: string;
 		Achildren: array of string;
 end;
 
 var
 	data_out: array of Tdata_people;
 	person: Tdata_people;
-	i, j, k, g: integer;
-	s: string; //для пустой строки
+	i, j, k, g, m, m2, v: integer;
+	s: string;
+	day_find, month_find: integer; // для 2.1
 
 begin
 i := 0;
@@ -23,8 +29,11 @@ i := 0;
     begin
         readln(person.fio);
         readln(person.gender);
-        readln(person.date_b);
-        readln(person.id_person);
+		readln(person.date_b);
+        person.date_day := StrToInt(Copy(s,1,2));
+        person.date_month := StrToInt(Copy(s,4,2));
+        {person.date_year := StrToInt(Copy(s,7,4));} 
+        readln(person.id_person);   
         SetLength(person.Achildren, 0);
         readln(s);
         
@@ -39,6 +48,7 @@ i := 0;
 		data_out[i] := person; //сохранение чела в массив
 		i := i + 1;             
 	end;
+	
 
   k := 1;
   for j:= 0 to i - 1 do
@@ -48,12 +58,30 @@ i := 0;
 		writeln('дата рождения: ', data_out[j].date_b);
 		writeln('номер уд/л: ', data_out[j].id_person);
 		writeln('Номер уд/л детей:');
+		
 		for g := 0 to Length(data_out[j].Achildren) - 1 do
 			writeln(data_out[j].Achildren[g]);
 			
+		writeln('ФИО детей: ');
+        for m := 0 to high(data_out[j].Achildren) do
+        begin
+            for m2 := 0 to i - 1 do
+            begin
+                if data_out[m2].id_person = data_out[j].Achildren[m] then
+                    writeln(data_out[m2].fio);
+            end;
+        end;
+        if data_out[j].Achildren[g] = '----' then writeln('----');
+        
+//2.1
+		for v := 0 to high(data_out[j].gender) do
+		begin
+			if data_out[j].gender = 'Ж' then writeln('женщина');
+		end;
+		
+		
 		writeln(i,'|', j);
 		k := k + 1;
 		writeln();
 	end;
 end.
-//расписать date_b
