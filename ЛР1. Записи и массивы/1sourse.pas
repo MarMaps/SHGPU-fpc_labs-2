@@ -30,8 +30,8 @@ i := 0;
         readln(person.fio);
         readln(person.gender);
 		readln(person.date_b);
-        person.date_day := StrToInt(Copy(s,1,2));
-        person.date_month := StrToInt(Copy(s,4,2));
+        person.date_day := StrToInt(Copy(person.date_b,1,2));
+        person.date_month := StrToInt(Copy(person.date_b,4,2));
         {person.date_year := StrToInt(Copy(s,7,4));} 
         readln(person.id_person);   
         SetLength(person.Achildren, 0);
@@ -74,14 +74,20 @@ i := 0;
         if data_out[j].Achildren[g] = '----' then writeln('----');
         
 //2.1
-		for v := 0 to high(data_out[j].gender) do
-		begin
-			if data_out[j].gender = 'Ж' then writeln('женщина');
-		end;
-		
-		
+		if data_out[j].gender = 'Ж' then writeln('женщина');	
+
 		writeln(i,'|', j);
 		k := k + 1;
 		writeln();
+	end;
+	writeln('день рождения для поиска: ');
+	readln(day_find);
+	writeln('месяц рождения для поиска: ');
+	readln(month_find);
+
+	for j := 0 to i - 1 do
+	begin
+		if (data_out[j].date_day = day_find) and (data_out[j].date_month = month_find) then
+			writeln('эта женщина родилась в этот джень: ', data_out[j].fio);
 	end;
 end.
