@@ -24,6 +24,7 @@ var
 	s: string;
 	day_find: string;
 	id_children_find: string;
+	ded_find: boolean;
 	
 begin
 i := 0;
@@ -76,17 +77,16 @@ i := 0;
 		writeln();
 	end;
 	
-//2.1
-	day_find := '29.03';
+//2.1 др женщины
+	day_find := '08.08';
 	for j := 0 to i - 1 do
 	begin
 		if (copy(data_out[j].date_b, 1, 5) = day_find) and (data_out[j].gender = 'Ж') then
 			writeln('найдена женщина: ', data_out[j].fio);
 	end;
-	
 	writeln();
 	
-//2.2
+//2.2 поиск родителей
 	id_children_find := '100284';
 	writeln('родители ребенка с данным уд/л: ');
 	for j := 0 to i - 1 do
@@ -95,7 +95,32 @@ i := 0;
 			if data_out[j].Achildren[g] = id_children_find then
 			begin
 				writeln(data_out[j].fio);
-				break; //выход тк родителя нашли
+				break; //выход тк ролдителя нашли
 			end;
 		end;
+	writeln();
+	
+//2.3 дедушки
+	for j := 0 to i - 1 do
+	begin
+		ded_find := false;
+		
+		if data_out[j].gender = 'М' then
+		begin
+			for v := 0 to high(data_out[j].Achildren) do
+			begin
+				if ded_find then 
+				break;
+				
+				for g := 0 to i - 1 do
+				begin
+					if (data_out[g].Achildren[0] <> '----') and (data_out[j].Achildren[v] = data_out[g].id_person) then
+					begin
+						writeln('дедушка найден: ', data_out[j].fio);
+						break;
+					end;
+				end;
+			end;
+		end;
+	end;
 end.
