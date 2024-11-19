@@ -1,8 +1,5 @@
 program data_people;
 
-{$mode objfpc}
-Uses sysutils;
-
 type 
 	Tdata_people = record
 		fio: string;
@@ -24,7 +21,7 @@ var
 	s: string;
 	day_find: string;
 	id_children_find: string;
-	ded_find: boolean;
+	ded_find, sir_find: boolean;
 	
 begin
 i := 0;
@@ -39,13 +36,13 @@ i := 0;
         
         while s <> '' do
         begin
-			SetLength(person.Achildren, Length(person.Achildren) + 1); // сколько детей на столько и увеличение
-			person.Achildren[High(person.Achildren)] := s; // сохранение уд/л ребенка----
+			SetLength(person.Achildren, Length(person.Achildren) + 1);
+			person.Achildren[High(person.Achildren)] := s;
 			readln(s); 
 		end;
     
 		SetLength(data_out, i + 1); 
-		data_out[i] := person; //сохранение чела в массив
+		data_out[i] := person;
 		i := i + 1;             
 	end;
 	
@@ -72,7 +69,6 @@ i := 0;
         end;
         if data_out[j].Achildren[g] = '----' then writeln('----');
 
-		writeln(i,'|', j);
 		k := k + 1;
 		writeln();
 	end;
@@ -95,7 +91,7 @@ i := 0;
 			if data_out[j].Achildren[g] = id_children_find then
 			begin
 				writeln(data_out[j].fio);
-				break; //выход тк ролдителя нашли
+				break;
 			end;
 		end;
 	writeln();
@@ -123,4 +119,32 @@ i := 0;
 			end;
 		end;
 	end;
+	writeln();
+	
+//2.4 сироты
+	writeln('найдены сироты: ');
+	for j := 0 to i - 1 do
+	begin
+		sir_find := false;
+		
+		for v := 0 to i - 1 do
+		begin
+			for k := 0 to high(data_out[v].Achildren) do
+			begin
+				if data_out[j].id_person = data_out[v].Achildren[k] then
+				begin
+					sir_find := true;
+					break;
+				end;
+			end;
+			
+			if sir_find then
+				break;
+		end;
+
+		case sir_find of
+			false: writeln(data_out[j].fio);
+		end;
+	end;
+	
 end.
