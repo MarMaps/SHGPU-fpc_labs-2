@@ -21,7 +21,7 @@ var
 	s: string;
 	day_find: string;
 	id_children_find: string;
-	ded_find, sir_find: boolean;
+	fio_find, ded_find, sir_find: boolean;
 	
 begin
 i := 0;
@@ -53,28 +53,41 @@ i := 0;
 		writeln('пол: ', data_out[j].gender);
 		writeln('дата рождения: ', data_out[j].date_b);
 		writeln('номер уд/л: ', data_out[j].id_person);
-		writeln('Номер уд/л детей:');
 		
+		writeln('Номер уд/л детей:');
 		for g := 0 to Length(data_out[j].Achildren) - 1 do
 			writeln(data_out[j].Achildren[g]);
+		
+		if data_out[j].Achildren[g] <> 'нет детей' then
+		begin
+			writeln('ФИО детей: ');
+			for m := 0 to Length(data_out[j].Achildren) - 1 do
 			
-		writeln('ФИО детей: ');
-        for m := 0 to high(data_out[j].Achildren) do
-        begin
-            for m2 := 0 to i - 1 do
-            begin
-                if data_out[m2].id_person = data_out[j].Achildren[m] then
-                    writeln(data_out[m2].fio);
-            end;
-        end;
-        if data_out[j].Achildren[g] = '----' then writeln('----');
+			begin	
+				for m2 := 0 to i - 1 do
+				begin
+					if data_out[m2].id_person = data_out[j].Achildren[m] then
+					begin
+						fio_find := true;
+						writeln(data_out[m2].fio);
+						break;
+					end;
+				end;
+				
+				if not fio_find then
+					writeln('---');
+			end;
+		end;
+			
+			//if data_out[j].Achildren[g] = 'нет детей' then writeln('нет детей');
+        
 
 		k := k + 1;
 		writeln();
 	end;
 	
 //2.1 др женщины
-	day_find := '08.08';
+	day_find := '11.06';
 	for j := 0 to i - 1 do
 	begin
 		if (copy(data_out[j].date_b, 1, 5) = day_find) and (data_out[j].gender = 'Ж') then
@@ -110,7 +123,7 @@ i := 0;
 				
 				for g := 0 to i - 1 do
 				begin
-					if (data_out[g].Achildren[0] <> '----') and (data_out[j].Achildren[v] = data_out[g].id_person) then
+					if (data_out[g].Achildren[0] <> 'нет детей') and (data_out[j].Achildren[v] = data_out[g].id_person) then
 					begin
 						writeln('дедушка найден: ', data_out[j].fio);
 						break;
