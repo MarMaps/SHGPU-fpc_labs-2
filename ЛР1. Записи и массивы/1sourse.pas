@@ -5,23 +5,19 @@ type
 		fio: string;
 		gender: string;
 		date_b: string;
-		date_day: integer;
-		date_month: integer;
-		date_year: integer;
 		id_person: string;
 		fio_children: string;
-		Achildren: array of string;
-		
+		Achildren: array of string;	
 end;
 
 var
 	data_out: array of Tdata_people;
 	person: Tdata_people;
-	i, j, k, g, m, m2, v: integer;
+	i, j, k, g, g2, v, c: integer;
 	s: string;
 	day_find: string;
 	id_children_find: string;
-	fio_find, ded_find, sir_find: boolean;
+	fio_find, sir_find: boolean;
 	
 begin
 i := 0;
@@ -53,35 +49,30 @@ i := 0;
 		writeln('пол: ', data_out[j].gender);
 		writeln('дата рождения: ', data_out[j].date_b);
 		writeln('номер уд/л: ', data_out[j].id_person);
-		
 		writeln('Номер уд/л детей:');
-		for g := 0 to Length(data_out[j].Achildren) - 1 do
-			writeln(data_out[j].Achildren[g]);
 		
-		if data_out[j].Achildren[g] <> 'нет детей' then
+		for g := 0 to high(data_out[j].Achildren) do
 		begin
-			writeln('ФИО детей: ');
-			for m := 0 to Length(data_out[j].Achildren) - 1 do
-			
-			begin	
-				for m2 := 0 to i - 1 do
-				begin
-					if data_out[m2].id_person = data_out[j].Achildren[m] then
-					begin
-						fio_find := true;
-						writeln(data_out[m2].fio);
-						break;
-					end;
-				end;
-				
-				if not fio_find then
-					writeln('---');
+			fio_find := false;
+			if length(data_out[j].Achildren) <> 0 then
+			begin
+				write(data_out[j].Achildren[g],' ');
 			end;
-		end;
 			
-			//if data_out[j].Achildren[g] = 'нет детей' then writeln('нет детей');
-        
-
+			for g2 := 0 to i - 1 do
+			begin
+				if data_out[g2].id_person = data_out[j].Achildren[g] 
+				then
+				begin
+					fio_find := true;
+					writeln('- ', data_out[g2].fio);
+					break;
+				end;
+			end;
+			
+			if not fio_find then
+				writeln('---');
+		end;
 		k := k + 1;
 		writeln();
 	end;
@@ -101,29 +92,73 @@ i := 0;
 	for j := 0 to i - 1 do
 		for v := 0 to High(data_out[j].Achildren) do
 		begin
-			if data_out[j].Achildren[g] = id_children_find then
+			if data_out[j].Achildren[v] = id_children_find then
 			begin
 				writeln(data_out[j].fio);
 				break;
 			end;
 		end;
+	
+	{когда 2 и больше родителей
+	для бд 
+			Второй папа Васильев
+			М
+			22.07.1986
+			962286
+			100284
+
+			Вторая мама Васильева
+			Ж
+			22.07.1986
+			962286
+			100284
+	id_children_find := '100284';
+	writeln('Родители ребенка с данным уд/л: ');
+	c := 0;
+	for j := 0 to i - 1 do
+	begin
+		for v := 0 to High(data_out[j].Achildren) do
+		begin
+			if (data_out[j].Achildren[v] = id_children_find) and (data_out[j].gender = 'Ж') then
+			begin
+				writeln(data_out[j].fio);
+				c += 1;
+				break;
+			end;
+		end;
+		if c > 0 then
+			break;
+	end;
+	
+	c := 0;
+	for j := 0 to i - 1 do
+	begin
+		for v := 0 to High(data_out[j].Achildren) do
+		begin
+			if (data_out[j].Achildren[v] = id_children_find) and (data_out[j].gender = 'М') then
+			begin
+				writeln(data_out[j].fio);
+				c += 1;
+				break;
+			end;
+		end;
+		if c > 0 then
+			break;
+	end;}
 	writeln();
+	
+	//exit();
 	
 //2.3 дедушки
 	for j := 0 to i - 1 do
 	begin
-		ded_find := false;
-		
 		if data_out[j].gender = 'М' then
 		begin
 			for v := 0 to high(data_out[j].Achildren) do
 			begin
-				if ded_find then 
-				break;
-				
 				for g := 0 to i - 1 do
 				begin
-					if (data_out[g].Achildren[0] <> 'нет детей') and (data_out[j].Achildren[v] = data_out[g].id_person) then
+					if (length(data_out[g].Achildren) <> 0) and (data_out[j].Achildren[v] = data_out[g].id_person) then
 					begin
 						writeln('дедушка найден: ', data_out[j].fio);
 						break;
@@ -150,9 +185,6 @@ i := 0;
 					break;
 				end;
 			end;
-			
-			if sir_find then
-				break;
 		end;
 
 		case sir_find of
