@@ -13,7 +13,7 @@ end;
 var
 	data_out: array of Tdata_people;
 	person: Tdata_people;
-	i, j, k, g, g2, v, c: integer;
+	i, j, k, g, g2, v, c, c1: integer;
 	s: string;
 	day_find: string;
 	id_children_find: string;
@@ -88,41 +88,16 @@ i := 0;
 	
 //2.2 поиск родителей
 	id_children_find := '100284';
-	writeln('родители ребенка с данным уд/л: ');
-	for j := 0 to i - 1 do
-		for v := 0 to High(data_out[j].Achildren) do
-		begin
-			if data_out[j].Achildren[v] = id_children_find then
-			begin
-				writeln(data_out[j].fio);
-				break;
-			end;
-		end;
-	
-	{когда 2 и больше родителей
-	для бд 
-			Второй папа Васильев
-			М
-			22.07.1986
-			962286
-			100284
-
-			Вторая мама Васильева
-			Ж
-			22.07.1986
-			962286
-			100284
-	id_children_find := '100284';
 	writeln('Родители ребенка с данным уд/л: ');
 	c := 0;
 	for j := 0 to i - 1 do
 	begin
 		for v := 0 to High(data_out[j].Achildren) do
 		begin
-			if (data_out[j].Achildren[v] = id_children_find) and (data_out[j].gender = 'Ж') then
+			if (data_out[j].id_person <> data_out[j].Achildren[v]) and (data_out[j].Achildren[v] = id_children_find) and (data_out[j].gender = 'Ж') then
 			begin
 				writeln(data_out[j].fio);
-				c += 1;
+				c := c + 1;
 				break;
 			end;
 		end;
@@ -130,24 +105,22 @@ i := 0;
 			break;
 	end;
 	
-	c := 0;
+	c1 := 0;
 	for j := 0 to i - 1 do
 	begin
 		for v := 0 to High(data_out[j].Achildren) do
 		begin
-			if (data_out[j].Achildren[v] = id_children_find) and (data_out[j].gender = 'М') then
+			if (data_out[j].id_person <> data_out[j].Achildren[v]) and (data_out[j].Achildren[v] = id_children_find) and (data_out[j].gender = 'М') then
 			begin
 				writeln(data_out[j].fio);
-				c += 1;
+				c1 := c1 + 1;
 				break;
 			end;
 		end;
-		if c > 0 then
+		if c1 > 0 then
 			break;
-	end;}
+	end;
 	writeln();
-	
-	//exit();
 	
 //2.3 дедушки
 	for j := 0 to i - 1 do
