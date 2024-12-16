@@ -191,7 +191,6 @@ begin
 	i := e div 256; 
 	el_i := e mod 256; // номер элемента внутри блока
   
-  // Если индекс блока выходит за границы, то просто ничего не делаем
 	if i < length(dstSet) then
 	begin
 		exclude(dstSet[i], el_i);
