@@ -168,12 +168,12 @@ end;
 
 { аналог функции include, изменяет переданное множество
    при необходимости увеличивает его размер }
-procedure includeSet(var dstSet: TLongSet; e: integer);
+procedure includeSet(var dstSet: TLongSet; e:integer);
 var
 	i, el_i: integer;
 begin
 	i := e div 256; 
-	el_i := e mod 256; // номер элемента внутри блока
+	el_i := e mod 256;
   
 	if i >= length(dstSet) then
 	begin
@@ -181,6 +181,21 @@ begin
     end;
     
 	include(dstSet[i], el_i);
+end;
+
+{ аналог функции exclude, изменяет переданное множество  }
+procedure excludeSet(var dstSet:TLongSet; e:integer);
+var
+	 i, el_i: integer;
+begin
+	i := e div 256; 
+	el_i := e mod 256; // номер элемента внутри блока
+  
+  // Если индекс блока выходит за границы, то просто ничего не делаем
+	if i < length(dstSet) then
+	begin
+		exclude(dstSet[i], el_i);
+	end;
 end;
 
 
@@ -203,44 +218,43 @@ begin
 end;
 
 var
-	//i: integer;
-	//j: byte;
-	main_set, forincl_set, set1, set2, set3, setIn: TLongSet;
+	main_set: TLongSet; 
+	set1, set2, set3: TLongSet;
 	
 begin
-	main_set := createSet(300);
-	forincl_set := createSet(3);
-	//writeln('начальный размер ', length(main_set));
+	main_set := createSet(310);
+	writeln('начальный размер main_set: ', length(main_set));
 	
 	{setSize(set2, 10);
 	writeln(length(set2));
 	setSize(set2, 300);
 	writeln(length(set2));}
 	
-	//set1 := createSet(3);
-	//set2 := createSet(3);
+	set1 := createSet(300);
+	set2 := createSet(300);
 	
-	forincl_set[0] := [0..6];
+	main_set[0] := [0..6];
+	main_set[1] := [8..13];
 	
-	//set1[0] := [0..5];
-	//set1[1] := [4..11];
-	//set2[0] := [2..10];
-	//set2[1] := [7..10];
+	writeln('main_set: ');
+	seeSet(main_set);
 	
-	//setIn := createSet(3);
-	//setIn[0] := [10..25];
+	set1[0] := [0..5];
+	set1[1] := [4..11];
+	set2[0] := [2..10];
+	set2[1] := [7..10];
 		
-	//seeSet(set1);
-	//writeln();
-	//seeSet(set2);
-	//writeln();
-	
+	writeln('set1:');
+	seeSet(set1);
+	writeln('set2:');
+	seeSet(set2);
+
 	//writeln('размер кратно 256: ', getSize(main_set));
 	
-	//destroySet(set2);
-	//writeln('уничтожение: ', length(set2));
+	//destroySet(main_set);
+	//writeln('после уничтожения: ', length(main_set));
 	
-	//writeln('функ in: ', inSet(setIn,11));
+	//writeln('функ in: ', inSet(main_set,11));
 	//writeln((11 + 255) div 256);
 	
 	//set3 := sumSet(set1, set2);
@@ -255,6 +269,9 @@ begin
 	//set3 := simmrSet(set1, set2);
 	//seeSet(set3);
 	
-	includeSet(forincl_set, 258);
-	seeSet(forincl_set);
+	//includeSet(main_set, 258);
+	//seeSet(main_set);
+	
+	//excludeSet(main_set, 9);
+	//seeSet(main_set);
 end.
