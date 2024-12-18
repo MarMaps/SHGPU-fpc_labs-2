@@ -49,7 +49,7 @@ begin
 	result := false;
 	for i := ((e + 255) div 256)-1 to length(bSet)-1 do
 	begin
-		if (e mod 255) in bset[i] then
+		if (e mod 256) in bset[i] then
 		begin
 			result := true;
 			break;
@@ -173,7 +173,7 @@ var
 	i, el_i: integer;
 begin
 	i := e div 256; 
-	el_i := e mod 256;
+	el_i := e {mod 256};
   
 	if i >= length(dstSet) then
 	begin
@@ -189,19 +189,20 @@ var
 	 i, el_i: integer;
 begin
 	i := e div 256; 
-	el_i := e mod 256; // номер элемента внутри блока
+	el_i := e mod 256;
   
 	if i < length(dstSet) then
 	begin
 		exclude(dstSet[i], el_i);
 	end;
+	
 end;
 
 
 //на вывод
 procedure seeSet(var dadwSet: TLongSet);
 var 
-	i_v: integer;
+	i_v, g: integer;
 	j_v: byte;
 	
 begin
@@ -210,7 +211,11 @@ begin
 		for j_v := 0 to 255 do
 		begin
 			if j_v in dadwSet[i_v] then
-				write(j_v:4);
+				//write(j_v:4);
+			begin
+				g := i_v * 256 + j_v;
+				write(g:5);
+			end;
 		end;
 		writeln();
 	end;
@@ -221,39 +226,40 @@ var
 	set1, set2, set3: TLongSet;
 	
 begin
-	main_set := createSet(310);
+	main_set := createSet(300);
 	writeln('начальный размер main_set: ', length(main_set));
 	
-	{setSize(set2, 10);
-	writeln(length(set2));
-	setSize(set2, 300);
-	writeln(length(set2));}
+	//setSize(main_set, 10);
+	//writeln(length(main_set));
 	
 	set1 := createSet(300);
 	set2 := createSet(300);
 	
 	main_set[0] := [0..6];
-	main_set[1] := [8..13];
+	//main_set[1] := [260..265];
 	
 	writeln('main_set: ');
-	seeSet(main_set);
+	writeln();
+	includeSet(main_set, 50000);
+	
+	writeln(length(main_set));
 	
 	set1[0] := [0..5];
 	set1[1] := [4..11];
 	set2[0] := [2..10];
 	set2[1] := [7..10];
 		
-	writeln('set1:');
-	seeSet(set1);
-	writeln('set2:');
-	seeSet(set2);
+	//writeln('set1:');
+	//seeSet(set1);
+	//writeln('set2:');
+	//seeSet(set2);
 
 	//writeln('размер кратно 256: ', getSize(main_set));
 	
 	//destroySet(main_set);
 	//writeln('после уничтожения: ', length(main_set));
 	
-	//writeln('функ in: ', inSet(main_set,11));
+	//writeln('функ in: ', inSet(main_set,8));
 	//writeln((11 + 255) div 256);
 	
 	//set3 := sumSet(set1, set2);
@@ -271,6 +277,6 @@ begin
 	//includeSet(main_set, 258);
 	//seeSet(main_set);
 	
-	//excludeSet(main_set, 9);
+	//excludeSet(main_set, 266);
 	//seeSet(main_set);
 end.
