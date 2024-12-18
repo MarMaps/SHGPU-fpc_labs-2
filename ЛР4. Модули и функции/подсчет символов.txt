@@ -1,0 +1,20 @@
+procedure getStrChr(s: String; var digitCount: Integer; var spaceCount: Integer; var otherCount: Integer);
+var
+  i: Integer;
+  ch: Char;
+begin
+  digitCount := 0;
+  spaceCount := 0;
+  otherCount := 0;
+
+  for i := 1 to Length(s) do
+  begin
+    ch := s[i];
+    if ch in ['0'..'9'] then
+      Inc(digitCount)
+    else if ch = ' ' then
+      Inc(spaceCount)
+    else
+      Inc(otherCount);
+  end;
+end;
