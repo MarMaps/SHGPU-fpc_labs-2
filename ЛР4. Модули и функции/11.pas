@@ -1,9 +1,11 @@
+{$mode objfpc}
+
 program n4;
 
 uses funcs;
 
 var
-	int_x: LongInt;
+	int_x: integer;
 	frac_x: real;
 
 begin
@@ -11,7 +13,7 @@ begin
 	writeln('максимальное из 2х: ', getMax(2, 5));
 	writeln('максимальное из 3х: ', getMax(3, 7, 1));
 	writeln('максимальное из 4х: ', getMax(4, 8, 2, 6));
-	writeln('максимальное из 5ти: ', getMax(9, 3, 5, 7, 1));
+	writeln('максимальное из 5ти: ', getMax(9, 3, 5, 9, 1));
 	writeln();
 //функции getType
 	writeln('тип 10: ', getType(10));
