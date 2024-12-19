@@ -18,6 +18,9 @@ function getType(a: boolean): string; overload;
 //процедура getIntFrac
 procedure getIntFrac(x: real; var int_x: integer; var frac_x: real);
 
+//процедура getStrChr
+procedure getStrChr(s: string; var prob, c, other: integer);
+
 implementation
 
 //getMax
@@ -71,4 +74,31 @@ begin
 	int_x := trunc(x);
 	frac_x := x - int_x;
 end;
+
+//getStrChr
+procedure getStrChr(s: string; var prob, c, other: integer);
+var
+	i: integer;
+begin
+	prob := 0;
+	c := 0;
+	other := 0;
+	
+	for i:= 1 to length(s) do
+	begin
+		if s[i] = ' ' then
+		begin
+			prob := prob + 1;
+		end
+		else if s[i] in ['0'..'9'] then
+		begin
+			c := c + 1;
+		end
+		else
+		begin
+			other := other + 1;
+		end;
+	end;
+end;
+
 end.
