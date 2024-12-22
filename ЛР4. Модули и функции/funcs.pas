@@ -21,7 +21,12 @@ procedure getIntFrac(x: real; var int_x: integer; var frac_x: real);
 //процедура getStrChr
 procedure getStrChr(s: string; var prob, c, other: integer);
 
+//функция validatedAll
+function validatedAll: boolean;
+
 implementation
+
+uses testFuncs;
 
 //getMax
 function getMax(a, b: integer): integer;
@@ -99,6 +104,12 @@ begin
 			other := other + 1;
 		end;
 	end;
+end;
+
+//validatedAll
+function validatedAll: boolean;
+begin
+	result := testFuncs.successFuncs;
 end;
 
 end.

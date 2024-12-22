@@ -12,6 +12,9 @@ function test_getIntFrac: boolean;
 
 function test_getStrChr: boolean;
 
+var 
+	successFuncs: boolean;
+
 implementation
 
 uses funcs;
@@ -61,7 +64,12 @@ begin
 	result := true;
 end;
 
-//initialization
-//	successFuncs;
-
+initialization
+	successFuncs := false; 
+	
+	if test_getMax = true and 
+	test_getType = true and
+	test_getIntFrac = true and
+	test_getStrChr = true then
+	successFuncs := true; 
 end.
