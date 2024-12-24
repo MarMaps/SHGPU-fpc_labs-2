@@ -1,8 +1,8 @@
-{$mode objfpc}
-
 program n4;
 
-uses funcs, testFuncs;
+{$mode objfpc}
+
+uses sysutils, funcs, testFuncs;
 
 var
 	int_x: integer;
@@ -10,6 +10,15 @@ var
 	prob, c, other: integer;
 	
 	a1, a2, a3, a4, a5: integer;
+	s: string;
+	s_int: integer;
+	s_real: real;
+	s_bool: boolean;
+	y: real;
+	int_y: integer;
+	frac_y: real;
+	s2: string;
+	prob2, c2, other2: integer;
 
 begin
 //1
@@ -36,7 +45,6 @@ begin
 	writeln();
 	
 //процедура getStrChr
-	prob:=0;
 	getStrChr('qwe02332 ei# p2s ', prob, c, other);
 	writeln('пробелы: ', prob);
 	writeln('цифры: ', c);
@@ -74,17 +82,40 @@ begin
 	if validatedAll = true then
 	begin
 		writeln('==интерактивная проверка раблты функций==');
-		{write('введите 2 числa: ');
-		readln(a1, a2);
-		writeln('макс из 2х: ', getMax(a1, a2));}
-		write('введите 5 чисел: ');
+		
+		write('1) введите 5 чисел: ');
 		readln(a1, a2, a3, a4, a5);
 		writeln('макс из 2х: ', getMax(a1, a2));
 		writeln('макс из 3х: ', getMax(a1, a2, a3));
 		writeln('макс из 4х: ', getMax(a1, a2, a3, a4));
 		writeln('макс из 5ти: ', getMax(a1, a2, a3, a4, a5));
+		writeln();
 		
+		write('2) введите значение: ');
+		readln(s);
+		if tryStrToInt(s, s_int) then
+			writeln('тип значения: ', getType(s_int))
+		else if tryStrToFloat(s, s_real) then
+			writeln('тип значения: ', getType(s_real))
+		else if tryStrToBool(s, s_bool) then
+			writeln('тип значения: ', getType(s_bool))
+		else writeln('тип значения: ', getType(s));
+		writeln();
 		
+		write('3) введите вещественное цисло: ');
+		readln(y);
+		getIntFrac(y, int_y, frac_y);
+		writeLn('целая часть: ', int_y);
+		writeLn('дробная часть: ', frac_y:0:10);
+		writeln();
+		
+		write('введите строку: ');
+		readln(s2);
+		getStrChr(s2, prob2, c2, other2);
+		writeln('пробелы: ', prob2);
+		writeln('цифры: ', c2);
+		writeln('остальные символы: ', other2);
+		writeln();
 	end
 	else 
 	begin

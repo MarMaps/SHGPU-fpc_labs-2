@@ -1,7 +1,10 @@
 {$mode objfpc}
+
 unit funcs;
 
 interface
+
+uses sysutils;
 
 //функции getMax
 function getMax(a, b: integer): integer; overload;
