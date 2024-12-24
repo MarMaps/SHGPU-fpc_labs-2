@@ -35,7 +35,7 @@ begin
 	writeln('тип: 5.77: ', getType(5.77));
 	writeln('тип 10: ', getType(10));
 	writeln('тип "pascal": ', getType('pascal'));
-	writeln('тип true: ', getType(false));
+	writeln('тип false: ', getType(false));
 	writeln();
 	
 //процедура getIntFrac
