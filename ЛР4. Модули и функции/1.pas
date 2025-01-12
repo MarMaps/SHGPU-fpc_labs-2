@@ -40,9 +40,9 @@ begin
 	writeln();
 	
 //процедура getIntFrac
-	getIntFrac(5.12099, int_x, frac_x);
+	getIntFrac(0.12099, int_x, frac_x);
 	writeLn('целая часть: ', int_x);
-	writeLn('дробная часть: ', frac_x:0:15);
+	writeLn('дробная часть: ', frac_x:0:20);
 	writeln();
 	
 //процедура getStrChr

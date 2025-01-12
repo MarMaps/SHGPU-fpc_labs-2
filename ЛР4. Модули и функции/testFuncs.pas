@@ -14,13 +14,6 @@ function test_getStrChr: boolean;
 
 var 
 	successFuncs: boolean;
-	{f: extended;
-	d: word;
-	b: byte;
-	i: int64;
-	s: single;
-	l: longbool;
-	c1: char;}
 
 implementation
 
@@ -39,8 +32,12 @@ begin
 	(getMax(-2, -4, -6, -8, -10) = -2) and
 	(getMax(0, -12344) = 0) and
 	(getMax(-5, -55, 15, -5432) = 15) and
-	(getMax(0, -9999, 9999) = 9999)then
-	result := true;		//дописать разные варианты*
+	(getMax(0, -9999, 9999) = 9999) and
+	(getMax(-44, -24, -14, -4, -1) = -1) and
+	(getMax(7, 7, 7, 9) = 9) and
+	(getMax(-90, 90) = 90) and
+	(getMax(-9, -5, -5, -10, -20) = -5) then
+	result := true;		//дописать разные варианты +
 end;
 
 function test_getType: boolean;
@@ -66,7 +63,7 @@ begin
 	(getType(s) = 'real') and
 	(getType(l) = 'boolean') and
 	(getType(c1) = 'string') then
-		result := true;		//дописать чтобы например тип int64 выдал integer, extended real...*
+		result := true;		//дописать чтобы например тип int64 выдал integer, extended real... +
 end;
 
 function test_getIntFrac: boolean;
@@ -89,7 +86,8 @@ begin
 		
 	getIntFrac(17.120995, int_x, frac_x);
 	if (int_x = 17) and 
-	(frac_x > 0.120000) then
+	(frac_x > 0.120000) and
+	(frac_x < 0.121100) then
 		result := true
 	else
 	begin
@@ -97,13 +95,49 @@ begin
 		exit();
 	end;
 		
-	{if ( ) then
-		result := true;
+	getIntFrac(0.000072, int_x, frac_x);
+	if (int_x = 0) and 
+	(frac_x > 0.00007) and
+	(frac_x < 0.00008) then
+		result := true
 	else
 	begin
 		result := false;
 		exit();
-	end;} //дописать с округлением
+	end;
+	
+	getIntFrac(0.0, int_x, frac_x);
+	if (int_x = 0) and 
+	(frac_x > -0.00001) and
+	(frac_x < 0.00001) then
+		result := true
+	else
+	begin
+		result := false;
+		exit();
+	end; 
+	
+	getIntFrac(17.120995, int_x, frac_x);
+	if (int_x = 17) and 
+	(frac_x > 0.120000) and
+	(frac_x < 0.121100) then
+		result := true
+	else
+	begin
+		result := false;
+		exit();
+	end;
+	
+	getIntFrac(-66.90, int_x, frac_x);
+	if (int_x = -66) and 
+	(frac_x < -0.8) and
+	(frac_x > -1.0) then
+		result := true
+	else
+	begin
+		result := false;
+		exit();
+	end;	//дописать варианты +
 end;
 
 function test_getStrChr: boolean;
@@ -116,7 +150,7 @@ begin
 	if (prob = 3) and
 	(c = 6) and
 	(other = 8) then
-		result := true		//дописать случаи: когда вся строка из пробелов(тогда цифры и др=0), когда везде только цифры...*
+		result := true
 	else
 	begin
 		result := false;
@@ -165,7 +199,7 @@ begin
 	begin
 		result := false;
 		exit();
-	end;
+	end;	//дописать случаи: когда вся строка из пробелов(тогда цифры и др=0), когда везде только цифры... +
 end;
 
 initialization
