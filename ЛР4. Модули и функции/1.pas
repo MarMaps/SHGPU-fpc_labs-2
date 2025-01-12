@@ -19,6 +19,7 @@ var
 	frac_y: real;
 	s2: string;
 	prob2, c2, other2: integer;
+	
 
 begin
 //1
@@ -32,16 +33,16 @@ begin
 	writeln();
 	
 //функции getType
-	writeln('тип: 5.77: ', getType(5.77));
+	writeln('тип: 5: ', getType(5));
 	writeln('тип 10: ', getType(10));
 	writeln('тип "pascal": ', getType('pascal'));
-	writeln('тип false: ', getType(false));
+	writeln('тип true: ', getType(false));
 	writeln();
 	
 //процедура getIntFrac
-	getIntFrac(5.2256, int_x, frac_x);
+	getIntFrac(5.12099, int_x, frac_x);
 	writeLn('целая часть: ', int_x);
-	writeLn('дробная часть: ', frac_x:0:10);
+	writeLn('дробная часть: ', frac_x:0:15);
 	writeln();
 	
 //процедура getStrChr
@@ -78,6 +79,8 @@ begin
 	writeln('из секции инициализации: ', successFuncs);
 	writeln();
 	
+	
+	//exit();
 //3
 	if validatedAll = true then
 	begin
@@ -106,7 +109,7 @@ begin
 		readln(y);
 		getIntFrac(y, int_y, frac_y);
 		writeLn('целая часть: ', int_y);
-		writeLn('дробная часть: ', frac_y:0:10);
+		writeLn('дробная часть: ', frac_y:0:15);
 		writeln();
 		
 		write('введите строку: ');

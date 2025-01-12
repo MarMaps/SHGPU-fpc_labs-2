@@ -14,6 +14,13 @@ function test_getStrChr: boolean;
 
 var 
 	successFuncs: boolean;
+	{f: extended;
+	d: word;
+	b: byte;
+	i: int64;
+	s: single;
+	l: longbool;
+	c1: char;}
 
 implementation
 
@@ -24,19 +31,42 @@ begin
 	result:= false;
 	if (getMax(2, 5) = 5) and
 	(getMax(3, 7, 1) = 7) and 
-	(getMax(4, 8, 2, 6) = 8) and
-	(getMax(9, 3, 5, 7, 1) = 9) then
-	result := true;
+	(getMax(4, 6, 2, 8) = 8) and
+	(getMax(9, 3, 5, 7, 1) = 9) and 
+	(getMax(4, 4, 4) = 4) and
+	(getMax(-10, -4, -2, 0) = 0) and
+	(getMax(0, 0, 0) = 0) and
+	(getMax(-2, -4, -6, -8, -10) = -2) and
+	(getMax(0, -12344) = 0) and
+	(getMax(-5, -55, 15, -5432) = 15) and
+	(getMax(0, -9999, 9999) = 9999)then
+	result := true;		//дописать разные варианты*
 end;
 
 function test_getType: boolean;
+var
+	f: extended = 0.44;
+	d: word = 5;
+	b: byte = 1;
+	i: int64 = 0;
+	s: single = 0.0;
+	l: longbool = false;
+	c1: char = 'W';
 begin
 	result := false;
 	if (getType(5.77) = 'real') and
 	(getType(10) = 'integer') and
 	(getType('pascal') = 'string') and
-	(getType(false) = 'boolean') then
-	result := true;
+	(getType(false) = 'boolean') and
+	
+	(getType(f) = 'real') and 
+	(getType(d) = 'integer') and 
+	(getType(b) = 'integer') and
+	(getType(i) = 'integer') and 
+	(getType(s) = 'real') and
+	(getType(l) = 'boolean') and
+	(getType(c1) = 'string') then
+		result := true;		//дописать чтобы например тип int64 выдал integer, extended real...*
 end;
 
 function test_getIntFrac: boolean;
@@ -45,11 +75,35 @@ var
 	frac_x: real;
 begin
 	result := false;
+		
 	getIntFrac(5.2256, int_x, frac_x);
 	if (int_x = 5) and 
 	(frac_x > 0.2255) and 
 	(frac_x < 0.2257) then
-    result := true;
+		result := true
+	else
+	begin
+		result := false;
+		exit();
+	end;
+		
+	getIntFrac(17.120995, int_x, frac_x);
+	if (int_x = 17) and 
+	(frac_x > 0.120000) then
+		result := true
+	else
+	begin
+		result := false;
+		exit();
+	end;
+		
+	{if ( ) then
+		result := true;
+	else
+	begin
+		result := false;
+		exit();
+	end;} //дописать с округлением
 end;
 
 function test_getStrChr: boolean;
@@ -57,11 +111,61 @@ var
 	prob, c, other: integer;
 begin
 	result := false;
+	
 	getStrChr('qwe02332 ei# p2s ', prob, c, other);
 	if (prob = 3) and
 	(c = 6) and
 	(other = 8) then
-	result := true;
+		result := true		//дописать случаи: когда вся строка из пробелов(тогда цифры и др=0), когда везде только цифры...*
+	else
+	begin
+		result := false;
+		exit();
+	end;
+	
+	getStrChr('        ', prob, c, other);
+	if (prob = 8) and
+	(c = 0) and
+	(other = 0) then
+		result := true
+	else
+	begin
+		result := false;
+		exit();
+	end;
+	
+	getStrChr('0987667890', prob, c, other);
+	if (prob = 0) and
+	(c = 10) and
+	(other = 0) then
+		result := true
+	else
+	begin
+		result := false;
+		exit();
+	end;
+	
+	getStrChr('poiuyt!!+', prob, c, other);
+	if (prob = 0) and
+	(c = 0) and
+	(other = 9) then
+		result := true
+	else
+	begin
+		result := false;
+		exit();
+	end;
+	
+	getStrChr('', prob, c, other);
+	if (prob = 0) and
+	(c = 0) and
+	(other = 0) then
+		result := true
+	else
+	begin
+		result := false;
+		exit();
+	end;
 end;
 
 initialization
