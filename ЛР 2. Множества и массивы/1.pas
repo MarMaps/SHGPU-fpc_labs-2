@@ -14,7 +14,7 @@ function createSet(count:integer): TLongSet;
 var
 	cr_set: TLongSet;
 begin
-	setlength(cr_set, ((count + 255) div 256));
+	setlength(cr_set, ((count + 256) div 256));
 	result := cr_set;
 end;
 
@@ -47,9 +47,10 @@ var
 	i: integer;
 begin
 	result := false;
-	for i := ((e + 255) div 256)-1 to length(bSet)-1 do
+	for i := ((e + 256) div 256)-1 to length(bSet)-1 do
 	begin
-		if (e mod 256) in bset[i] then
+		e := e mod 256;
+		if e in bset[i] then
 		begin
 			result := true;
 			break;
@@ -170,40 +171,32 @@ end;
    при необходимости увеличивает его размер }
 procedure includeSet(var dstSet: TLongSet; e:integer);
 var
-	i, el_i: integer;
+	i, min_el: integer;
 begin
-	i := e div 256; 
-	el_i := e {mod 256};
+	min_el := (e + 256) div 256;
   
-	if i >= length(dstSet) then
-	begin
-		setlength(dstSet, i + 1);
-    end;
-    
-	include(dstSet[i], el_i);
+	if (Length(dstSet) < min_el) then setLength(dstSet, min_el);
+
+    i := min_el - 1;
+    e := (e + 256) mod 256;
+    Include(dstSet[i], e);
 end;
 
 { аналог функции exclude, изменяет переданное множество  }
 procedure excludeSet(var dstSet:TLongSet; e:integer);
 var
-	 i, el_i: integer;
+	i: integer;
 begin
-	i := e div 256; 
-	el_i := e mod 256;
-  
-	if i < length(dstSet) then
-	begin
-		exclude(dstSet[i], el_i);
-	end;
-	
+    i := ((e + 256) div 256) - 1;
+    e := (e + 256) mod 256;
+    exclude(dstSet[i], e);
 end;
 
 
 //на вывод
-procedure seeSet(var dadwSet: TLongSet);
+procedure seeSet(dadwSet: TLongSet);
 var 
-	i_v, g: integer;
-	j_v: byte;
+	i_v, j_v: integer;
 	
 begin
 	for i_v := 0 to length(dadwSet)-1 do
@@ -211,10 +204,8 @@ begin
 		for j_v := 0 to 255 do
 		begin
 			if j_v in dadwSet[i_v] then
-				//write(j_v:4);
 			begin
-				g := i_v * 256 + j_v;
-				write(g:5);
+				write(256 * i_v + j_v :4);
 			end;
 		end;
 		writeln();
@@ -227,41 +218,33 @@ var
 	
 begin
 	main_set := createSet(300);
-	writeln('начальный размер main_set: ', length(main_set));
-	
-	//setSize(main_set, 10);
-	//writeln(length(main_set));
-	
-	set1 := createSet(300);
-	set2 := createSet(300);
 	
 	main_set[0] := [0..6];
-	//main_set[1] := [260..265];
+	main_set[1] := [100..105];
+	seeSet(main_set);
 	
-	writeln('main_set: ');
-	writeln();
-	includeSet(main_set, 50000);
+	//setSize(main_set, 10);
+	//writeln('размер main_set после setSize: ', length(main_set));
 	
-	writeln(length(main_set));
+	//writeln('размер кратно 256: ', getSize(main_set));
 	
+	//destroySet(main_set);
+	//writeln('длина множества после уничтожения: ', length(main_set));
+	
+	//writeln('функ in: ', inSet(main_set,1));
+	
+	{set1 := createSet(300);
+	set2 := createSet(300);
 	set1[0] := [0..5];
 	set1[1] := [4..11];
 	set2[0] := [2..10];
 	set2[1] := [7..10];
-		
-	//writeln('set1:');
-	//seeSet(set1);
-	//writeln('set2:');
-	//seeSet(set2);
-
-	//writeln('размер кратно 256: ', getSize(main_set));
+	writeln('set1:'); //256*[x]+[x1..x2]
+	seeSet(set1);
+	writeln('set2:');
+	seeSet(set2);}
 	
-	//destroySet(main_set);
-	//writeln('после уничтожения: ', length(main_set));
-	
-	//writeln('функ in: ', inSet(main_set,8));
-	//writeln((11 + 255) div 256);
-	
+	//writeln('set3:');
 	//set3 := sumSet(set1, set2);
 	//seeSet(set3);
 	
@@ -274,9 +257,9 @@ begin
 	//set3 := simmrSet(set1, set2);
 	//seeSet(set3);
 	
-	//includeSet(main_set, 258);
+	//includeSet(main_set, 262);
 	//seeSet(main_set);
 	
-	//excludeSet(main_set, 266);
+	//excludeSet(main_set, 4);
 	//seeSet(main_set);
 end.
