@@ -47,40 +47,55 @@ var
 	i: integer;
 begin
 	result := false;
-	for i := ((e + 256) div 256)-1 to length(bSet)-1 do
-	begin
-		e := e mod 256;
-		if e in bset[i] then
-		begin
-			result := true;
-			break;
-		end;
-	end;
+	i := ((e + 256) div 256)-1;
+	e := e mod 256;
+	if e in bset[i] then
+		result := true;
+end;
+
+//на обнуление
+procedure setclean(var mySet:TLongSet; newLen:integer);
+var 
+    i, oldLen: integer;
+begin
+    oldLen := length(mySet);
+    setLength(mySet, newLen);
+
+    for i:= oldLen+1 to newLen-1 do
+    begin
+        mySet[i] := [];
+    end;
 end;
 
 { аналог операции +, возвращает новое множество минимально необходимого размера}
 function sumSet(set1,set2:TLongSet):TLongSet;
 var
-	i: integer;
+	i, lenSet: integer;
 	resSet: TLongSet;
 begin
 	if length(set1) <= length(set2) then
 	begin
 		setlength(resSet,length(set2));
+		lenSet := length(set2);
+		setclean(set1, lenSet);
+		
 		for i := 0 to length(resSet)-1 do
 		begin
 			resSet[i] += set2[i]; 
 		end;
 		
-		 for i := 0 to length(set1)-1 do
-		 begin
+		for i := 0 to length(set1)-1 do
+		begin
 			resSet[i] += set1[i]; 
-		 end;
+		end;
 		result := resSet;
 	end
 	else
 	begin
 		setlength(resSet,length(set1));
+		lenSet := length(set1);
+		setclean(set2, lenSet);
+		
 		for i := 0 to length(resSet)-1 do
 		begin
 			resSet[i] += set1[i]; 
@@ -98,23 +113,27 @@ end;
 function subSet(set1,set2:TLongSet):TLongSet;
 var
 	resSet: TLongSet;
-	i: integer;
+	i, j, lenSet: integer;
 begin
 	if length(set1) <= length(set2) then
 	begin
-		setlength(set1, length(set2));
-		setlength(resSet, length(set2));
+		lenSet := length(set2);
+		setclean(set1, lenSet);
 	end
 	else 
-	if length(set1) > length(set2) then
 	begin
-		setlength(set2, length(set1));
-		setlength(resSet, length(set1));
+		lenSet := length(set1);
+		setclean(set2, lenSet);
 	end;
-	for i := 0 to length(set1)-1 do
+	setLength(resSet, lenSet);
+	j := 0;
+	for i := 0 to lenSet-1 do
 		begin
-			resSet[i] := set1[i] - set2[i]; 
+			resSet[i] := set1[i] - set2[i];
+			if resSet[i] <> [] then j := i;
 		end;
+
+		setLength(resSet, j + 1);
 	
 	result := resSet;
 end;
@@ -123,23 +142,28 @@ end;
 function mulSet(set1,set2:TLongSet):TLongSet;
 var
 	resSet: TLongSet;
-	i: integer;
+	i, j, lenSet: integer;
 begin
 	if length(set1) <= length(set2) then
 	begin
-		setlength(set1, length(set2));
-		setlength(resSet, length(set2));
+		lenSet := length(set2);
+		setclean(set1, lenSet);
 	end
 	else 
-	if length(set1) > length(set2) then
 	begin
-		setlength(set2, length(set1));
-		setlength(resSet, length(set1));
+		lenSet := length(set1);
+		setclean(set2, lenSet);
 	end;
-	for i := 0 to length(set1)-1 do
+	setLength(resSet, lenSet);
+	j := 0;
+	for i := 0 to lenSet-1 do
 		begin
-			resSet[i] := set1[i] * set2[i]; 
+			resSet[i] := set1[i] * set2[i];
+			if resSet[i] <> [] then j := i;
 		end;
+
+		setLength(resSet, j + 1);
+	
 	result := resSet;
 end;
 
@@ -147,23 +171,28 @@ end;
 function simmrSet(set1,set2:TLongSet):TLongSet;
 var
 	resSet: TLongSet;
-	i: integer;
+	i, j, lenSet: integer;
 begin
 	if length(set1) <= length(set2) then
 	begin
-		setlength(set1, length(set2));
-		setlength(resSet, length(set2));
+		lenSet := length(set2);
+		setclean(set1, lenSet);
 	end
 	else 
-	if length(set1) > length(set2) then
 	begin
-		setlength(set2, length(set1));
-		setlength(resSet, length(set1));
+		lenSet := length(set1);
+		setclean(set2, lenSet);
 	end;
-	for i := 0 to length(set1)-1 do
+	setLength(resSet, lenSet);
+	j := 0;
+	for i := 0 to lenSet-1 do
 		begin
-			resSet[i] := set1[i] >< set2[i]; 
+			resSet[i] := set1[i] >< set2[i];
+			if resSet[i] <> [] then j := i;
 		end;
+
+		setLength(resSet, j + 1);
+	
 	result := resSet;
 end;
 
@@ -205,11 +234,11 @@ begin
 		begin
 			if j_v in dadwSet[i_v] then
 			begin
-				write(256 * i_v + j_v :4);
+				write(256 * i_v + j_v :6);
 			end;
 		end;
-		writeln();
 	end;
+	writeln();
 end;
 
 var
@@ -217,11 +246,8 @@ var
 	set1, set2, set3: TLongSet;
 	
 begin
-	main_set := createSet(300);
-	
-	main_set[0] := [0..6];
-	main_set[1] := [100..105];
-	seeSet(main_set);
+	//main_set := createSet(790);
+	//writeln(length(main_set));
 	
 	//setSize(main_set, 10);
 	//writeln('размер main_set после setSize: ', length(main_set));
@@ -231,18 +257,23 @@ begin
 	//destroySet(main_set);
 	//writeln('длина множества после уничтожения: ', length(main_set));
 	
-	//writeln('функ in: ', inSet(main_set,1));
+	{includeSet(main_set, 2000);
+	seeSet(main_set);
+	writeln('функ in: ', inSet(main_set, 2000));}
 	
-	{set1 := createSet(300);
-	set2 := createSet(300);
-	set1[0] := [0..5];
-	set1[1] := [4..11];
-	set2[0] := [2..10];
-	set2[1] := [7..10];
-	writeln('set1:'); //256*[x]+[x1..x2]
+	set1 := createSet(30);
+	set2 := createSet(30);
+	includeSet(set1, 1000);
+	includeSet(set1, 5000);
+	includeSet(set2, 5000);
+	writeln('set1:');
 	seeSet(set1);
 	writeln('set2:');
-	seeSet(set2);}
+	seeSet(set2);
+	set3 := subSet(set1, set2);
+	writeln('set3:');
+	seeSet(set3);
+	writeln('размер set3: ', getSize(set3));
 	
 	//writeln('set3:');
 	//set3 := sumSet(set1, set2);
@@ -257,7 +288,7 @@ begin
 	//set3 := simmrSet(set1, set2);
 	//seeSet(set3);
 	
-	//includeSet(main_set, 262);
+	//includeSet(main_set, 2000);
 	//seeSet(main_set);
 	
 	//excludeSet(main_set, 4);
