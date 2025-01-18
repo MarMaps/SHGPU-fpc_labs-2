@@ -1,6 +1,8 @@
 {$mode objfpc}
 program num2;
 
+uses heaptrc;
+
 {тип множества}
 type
 	TSingleSet = set of byte;
@@ -48,6 +50,11 @@ var
 begin
 	result := false;
 	i := ((e + 256) div 256)-1;
+	if i > length(bSet) then
+	begin
+		result := false;
+		exit();
+	end;
 	e := e mod 256;
 	if e in bset[i] then
 		result := true;
@@ -66,6 +73,7 @@ begin
         mySet[i] := [];
     end;
 end;
+
 
 { аналог операции +, возвращает новое множество минимально необходимого размера}
 function sumSet(set1,set2:TLongSet):TLongSet;
@@ -125,7 +133,7 @@ begin
 		lenSet := length(set1);
 		setclean(set2, lenSet);
 	end;
-	setLength(resSet, lenSet);
+	setclean(resSet, lenSet);
 	j := 0;
 	for i := 0 to lenSet-1 do
 		begin
@@ -154,7 +162,7 @@ begin
 		lenSet := length(set1);
 		setclean(set2, lenSet);
 	end;
-	setLength(resSet, lenSet);
+	setclean(resSet, lenSet);
 	j := 0;
 	for i := 0 to lenSet-1 do
 		begin
@@ -183,7 +191,7 @@ begin
 		lenSet := length(set1);
 		setclean(set2, lenSet);
 	end;
-	setLength(resSet, lenSet);
+	setclean(resSet, lenSet);
 	j := 0;
 	for i := 0 to lenSet-1 do
 		begin
@@ -263,17 +271,18 @@ begin
 	
 	set1 := createSet(30);
 	set2 := createSet(30);
-	includeSet(set1, 1000);
-	includeSet(set1, 5000);
-	includeSet(set2, 5000);
-	writeln('set1:');
+	includeSet(set1, 100);
+	includeSet(set2, 100);
+	//includeSet(set2, 5000);
+	{writeln('set1:');
 	seeSet(set1);
 	writeln('set2:');
 	seeSet(set2);
-	set3 := subSet(set1, set2);
+	set3 := simmrSet(set1, set2);
 	writeln('set3:');
 	seeSet(set3);
-	writeln('размер set3: ', getSize(set3));
+	writeln('размер set3: ', getSize(set3));}
+	writeln('функ in: ', inSet(set1, 5000000));
 	
 	//writeln('set3:');
 	//set3 := sumSet(set1, set2);
