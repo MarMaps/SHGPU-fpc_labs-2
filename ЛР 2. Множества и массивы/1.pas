@@ -60,7 +60,7 @@ begin
 		result := true;
 end;
 
-//на обнуление
+//на зачистку
 procedure setclean(var mySet:TLongSet; newLen:integer);
 var 
     i, oldLen: integer;
@@ -83,9 +83,8 @@ var
 begin
 	if length(set1) <= length(set2) then
 	begin
-		setlength(resSet,length(set2));
-		lenSet := length(set2);
-		setclean(set1, lenSet);
+		setclean(resSet,length(set2));
+		
 		
 		for i := 0 to length(resSet)-1 do
 		begin
@@ -100,9 +99,7 @@ begin
 	end
 	else
 	begin
-		setlength(resSet,length(set1));
-		lenSet := length(set1);
-		setclean(set2, lenSet);
+		setclean(resSet,length(set1));
 		
 		for i := 0 to length(resSet)-1 do
 		begin
@@ -199,7 +196,7 @@ begin
 			if resSet[i] <> [] then j := i;
 		end;
 
-		setLength(resSet, j + 1);
+		setclean(resSet, j + 1);
 	
 	result := resSet;
 end;
@@ -254,7 +251,7 @@ var
 	set1, set2, set3: TLongSet;
 	
 begin
-	//main_set := createSet(790);
+	main_set := createSet(790);
 	//writeln(length(main_set));
 	
 	//setSize(main_set, 10);
@@ -273,15 +270,15 @@ begin
 	set2 := createSet(30);
 	includeSet(set1, 100);
 	includeSet(set2, 100);
-	//includeSet(set2, 5000);
-	{writeln('set1:');
+	includeSet(set2, 5000);
+	writeln('set1:');
 	seeSet(set1);
 	writeln('set2:');
 	seeSet(set2);
 	set3 := simmrSet(set1, set2);
 	writeln('set3:');
 	seeSet(set3);
-	writeln('размер set3: ', getSize(set3));}
+	writeln('размер set3: ', getSize(set3));
 	writeln('функ in: ', inSet(set1, 5000000));
 	
 	//writeln('set3:');
