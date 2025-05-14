@@ -6,7 +6,6 @@ uses
 var
   canvas: T23030428Canvas;
   color: TRGB;
-  i: integer;
 begin
   canvas := T23030428Canvas.Create;
 
@@ -21,10 +20,10 @@ begin
   writeLn('текущая позиция:', canvas.GetPencilX, ',', canvas.GetPencilY);
   canvas.SaveToPPM('/home/marina/Документы/prog2/lr1/test.ppm');
 
-  canvas.LoadFromPPM('/home/marina/Документы/prog2/lr1/test.ppm');
+  canvas.LoadFromPPM('/home/marina/Документы/prog2/lr1/11.ppm');
   canvas.KoordPencil(0, 0);
-  canvas.SetPencilColor(100, 100, 0);
+  canvas.SetPencilColor(100, 0, 100);
   canvas.DrawPixel;
-  canvas.SaveToPPM('/home/marina/Документы/prog2/lr1/check.ppm');
+  canvas.SaveToPPM('/home/marina/Документы/prog2/lr1/112.ppm');
 end.
 

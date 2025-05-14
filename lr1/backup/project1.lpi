@@ -27,7 +27,7 @@
       <Unit>
         <Filename Value="project1.lpr"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="CanvasTest"/>
+        <UnitName Value="Project1"/>
       </Unit>
       <Unit>
         <Filename Value="u23030428canvas.pas"/>
