@@ -13,17 +13,24 @@ begin
   canvas.SetPencilColor(0, 0, 255);
   canvas.KoordPencil(2, 1);
   canvas.DrawPixel;
-
   color := canvas.GetPencilColor;
   writeLn('текущий цвет = R:', color.R, ' G:', color.G, ' B:', color.B);
   writeLn('размер холста: ', canvas.GetWidth, 'x', canvas.GetHeight);
   writeLn('текущая позиция:', canvas.GetPencilX, ',', canvas.GetPencilY);
-  canvas.SaveToPPM('/home/marina/Документы/prog2/lr1/test.ppm');
+  canvas.SaveToPPM('test.ppm');
 
-  canvas.LoadFromPPM('/home/marina/Документы/prog2/lr1/11.ppm');
-  canvas.KoordPencil(0, 0);
+  canvas.LoadFromPPM('11.ppm');
+  //canvas.add(30, 30);
+  canvas.KoordPencil(20, 10);
   canvas.SetPencilColor(100, 0, 100);
   canvas.DrawPixel;
-  canvas.SaveToPPM('/home/marina/Документы/prog2/lr1/112.ppm');
-end.
 
+  canvas.KoordPencil(21, 10);
+  canvas.SetPencilColor(255, 0, 0);
+  canvas.DrawPixel;
+  canvas.SaveToPPM('112.ppm');
+  color := canvas.GetPencilColor;
+  writeLn('текущий цвет = R:', color.R, ' G:', color.G, ' B:', color.B);
+  writeLn('текущая позиция:', canvas.GetPencilX, ',', canvas.GetPencilY);
+  writeLn('размер холста: ', canvas.GetWidth, 'x', canvas.GetHeight);
+end.
