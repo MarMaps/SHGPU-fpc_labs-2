@@ -1,0 +1,1 @@
+bytesRead в TFileStorage.getData

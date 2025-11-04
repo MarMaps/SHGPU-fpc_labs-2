@@ -12,7 +12,7 @@ begin
   writeln(y[6]);
   writeln(y.count);
   y.free;
-  writeln('=========');
+
   x := TFloatMemStorage.Create;
   x[1] := 0.999;
   x[4] := 3.14;
