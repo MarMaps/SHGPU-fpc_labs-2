@@ -1,0 +1,7 @@
+program project1;
+
+uses unit1;
+
+begin
+end.
+

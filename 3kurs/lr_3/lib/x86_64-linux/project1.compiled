@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <Compiler Value="/usr/bin/fpc" Date="1649687632"/>
+  <Params Value=" -MObjFPC -Scghi -Cg -O1 -gw2 -godwarfsets -gl -l -vewnhibq &quot;-Fi/home/marina/Рабочий стол/SHGPU-fpc_labs-2/3kurs/lr_2/lib/x86_64-linux&quot; &quot;-Fu/home/marina/Рабочий стол/SHGPU-fpc_labs-2/3kurs/lr_2/&quot; &quot;-FU/home/marina/Рабочий стол/SHGPU-fpc_labs-2/3kurs/lr_2/lib/x86_64-linux/&quot; &quot;-FE/home/marina/Рабочий стол/SHGPU-fpc_labs-2/3kurs/lr_2/&quot; &quot;-o/home/marina/Рабочий стол/SHGPU-fpc_labs-2/3kurs/lr_2/project1&quot; project1.lpr"/>
+</CONFIG>

@@ -14,14 +14,16 @@ type
  // абстрактный класс с описанием механизма доступа к данным
  { TAbstractStorage }
 
- TAbstractStorage=class
+ //TAbstractStorage=class  //еще для лр3
+ generic TAbstractStorage<TData>=class //уже лр 1
     protected
 	function getData(position:qword):TData;virtual;abstract;
 	procedure setData(position:qword; value:TData);virtual;abstract;
 	function getCount:qword;virtual;abstract;
     protected
 	property data[position:qword]:TData read getData write setData; default;
-	property count:qword read getcount;
+    public
+        property count:qword read getcount;
  end;
 
  // класс с реализацией хранилища в оперативной памяти
@@ -30,27 +32,51 @@ type
  // при попытке чтения данных за его пределами.
  { TMemStorage }
 
- TMemStorage=class(TAbstractStorage)
+ //TMemStorage=class(TAbstractStorage) //лр3
+ generic TMemStorage<TData>=class(specialize TAbstractStorage<TData>)
     private
 	fdata:array of TData;
     protected
 	function getData(position:qword):TData;override;
 	procedure setData(position:qword; value:TData);override;
-    public
-        function getCount:qword;override;
+	function getCount:qword;override;
  end;
+
+
+ { TFileStorage }
+
+ //TFileStorage = class(TAbstractStorage)
+ generic TFileStorage<TData>=class(specialize TAbstractStorage<TData>)
+  private
+    f: file;
+    fname: string;
+    fFlag: boolean;
+  protected
+    function getData(position:qword):TData; override;
+    procedure setData(position:qword; value:TData); override;
+    function getCount:qword; override;
+  public
+    constructor Create(filename: string);
+    destructor Destroy; override;
+end;
+
+ //специализировать
+ TInt64MemStorage= specialize TMemStorage<Int64>;
+ TExtendedMemStorage = specialize TMemStorage<Extended>;
+ TByteFileStorage = specialize TFileStorage<Byte>;
+ TStringFileStorage = specialize TFileStorage<ShortString>;
 
  // класс с реализацией хранилища целочисленных данных в оперативной памяти
  // с преобразованием типа данных integer в TData и обратно.
  { TIntMemStorage }
 
- TIntMemStorage=class(TMemStorage)
+ {TIntMemStorage=class(TMemStorage)
     protected
 	function getIData(position:qword):integer;
 	procedure setIData(position:qword; value:integer);
     public
 	property dataI[position:qword]:integer read getIData write setIData; default;
-    end;
+    end;}
 
  // класс с реализацией хранилища вещественных данных максимальной емкости в оперативной памяти
  // с выделением из оперативной памяти требуемого объема при первом сохранении элемента
@@ -59,22 +85,92 @@ type
  // так как размер типа extended превышает размер типа TData.
  { TFloatMemStorage }
 
- TFloatMemStorage=class(TMemStorage)
+ {TFloatMemStorage=class(TMemStorage)
     protected
 	function getfData(position:qword):extended;
 	procedure setfData(position:qword; value:extended);
     public
 	property dataF[position:qword]:extended read getfData write setfData; default;
 	destructor Destroy;override;
-    end;
+    end;}
 
 implementation
+
+{ TFileStorage }
+
+function TFileStorage.getData(position: qword): TData;
+var
+  recordCount: qword;
+begin
+  recordCount := FileSize(f);  // Количество записей в файле
+
+  if position < recordCount then
+  begin
+    Seek(f, position);
+    BlockRead(f, Result, 1);  // Читаем 1 запись размером SizeOf(TData)
+  end
+  else
+    Result := Default(TData);
+end;
+
+procedure TFileStorage.setData(position: qword; value: TData);
+var
+  recordCount: qword;
+  def_data: TData;
+  i: qword;
+begin
+  recordCount := FileSize(f);  // Количество записей в файле
+
+  if position >= recordCount then
+  begin
+    def_data := Default(TData);
+
+    // Переходим в конец файла
+    Seek(f, recordCount);
+
+    // Заполняем промежуток пустыми значениями
+    for i := recordCount to position - 1 do
+    begin
+      BlockWrite(f, def_data, 1);  // Пишем 1 запись размером SizeOf(TData)
+    end;
+  end;
+
+  Seek(f, position);
+  BlockWrite(f, value, 1);  // Пишем 1 запись размером SizeOf(TData)
+end;
+
+function TFileStorage.getCount: qword;
+begin
+  result := fileSize(f);
+end;
+
+constructor TFileStorage.Create(filename: string);
+begin
+  inherited Create;
+  fname := filename;
+  fFlag := false;
+
+  assignFile(f, fname);
+
+  // ВСЕГДА создаем новый файл (для тестирования)
+  rewrite(f, SizeOf(TData));
+
+  fFlag := true;
+end;
+
+
+destructor TFileStorage.Destroy;
+begin
+  if fFlag = true then
+    closeFile(f);
+  inherited Destroy;
+end;
 
 { TMemStorage }
 
 function TMemStorage.getData(position: qword): TData;
 begin
-  if (position >= Length(fdata)) then exit(nil);
+  if (position >= Length(fdata)) then exit(Default(TData));
   result := fdata[position];
 end;
 
@@ -91,7 +187,7 @@ end;
 
 { TIntMemStorage }
 
-function TIntMemStorage.getIData(position: qword): integer;
+{function TIntMemStorage.getIData(position: qword): integer;
 begin
   result := integer(getData(position));
 end;
@@ -131,7 +227,6 @@ begin
     if (data[i] = nil) then break;
     freemem(data[i]);
   end;
-end;
+end;}
 
 end.
-

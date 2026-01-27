@@ -1,0 +1,55 @@
+program project1;
+uses unit1;
+var x:TInt64MemStorage;
+    y:TExtendedMemStorage;
+    z :TByteFileStorage;
+
+begin
+  x := TInt64MemStorage.Create;
+  x[0] := 2;
+  x[7] := 5;
+  writeln(x[0]);
+  writeln(x[7]);
+  writeln(x[6]);
+  writeln('кол-во: ', x.count);
+  x.free;
+  writeln('=======');
+
+  y := TExtendedMemStorage.Create;
+  y[1] := 0.999;
+  y[4] := 3.14;
+  writeln(y[1]:0:2);
+  writeln(y[4]:0:2);
+  writeln('кол-во: ', y.count);
+  y.free;
+  writeln('=======');
+
+  z := TByteFileStorage.Create('byte.dat');
+  z[0] := 5;
+  z[2] := 190;
+  writeln(z[0]);
+  writeln(z[2]);
+  writeln(z.count);
+  z.free;
+  writeln('=======');
+end.
+
+ {var x:TExtendedMemStorage;
+    y:TInt64MemStorage;
+begin
+    x:=TExtendedMemStorage.Create;
+    x[2]:=1.2;
+    writeln(x[0]:0:2);
+    writeln(x[2]:0:2);
+    writeln(x.count);
+    x.free;
+    y:=TInt64MemStorage.Create;
+    y[5]:=7;
+    y[3]:=8;
+    writeln(y[1]);
+    writeln(y[3]);
+    writeln(y[5]);
+    writeln(y.count);
+    y.free;
+end.}
+
