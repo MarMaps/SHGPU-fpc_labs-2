@@ -22,10 +22,8 @@ type
     procedure Edit2EditingDone(Sender: TObject);
     procedure FormChangeBounds(Sender: TObject);
     procedure FormCreate(Sender: TObject);
-    procedure FormResize(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
   private
-    PrevWidth, PrevHeight: integer;
     flag: boolean;
 
   public
@@ -39,28 +37,8 @@ implementation
 
 procedure TForm1.FormCreate(Sender: TObject);
 begin
-  Constraints.MinWidth := 500;
-  Constraints.MaxWidth := 1000;
-  Constraints.MinHeight := 100;
-  Constraints.MaxHeight := 500;
-
-  PrevWidth := Width;
-  PrevHeight := Height;
-
   Edit1.Text := IntToStr(Width);
   Edit2.Text := IntToStr(Height);
-end;
-
-procedure TForm1.FormResize(Sender: TObject);
-begin
-  Edit1.Text := IntToStr(Width);
-  Edit2.Text := IntToStr(Height);
-
-  PrevWidth := Width; // Сохр текущ размеров
-  PrevHeight := Height;
-
-  Panel1.Left := (ClientWidth - Panel1.Width) div 2;
-  Panel1.Top := (ClientHeight - Panel1.Height) div 2;
 end;
 
 procedure TForm1.Timer1Timer(Sender: TObject);
@@ -70,9 +48,9 @@ begin
     if (Width < Constraints.MaxWidth) or (Height < Constraints.MaxHeight) then
     begin
       if Width < Constraints.MaxWidth then
-        Width := Width + 1;
+        Width := Width + 5;
       if Height < Constraints.MaxHeight then
-        Height := Height + 1;
+        Height := Height + 5;
     end
     else
     begin
@@ -88,9 +66,9 @@ begin
     if (Width > Constraints.MinWidth) or (Height > Constraints.MinHeight) then
     begin
       if Width > Constraints.MinWidth then
-        Width := Width - 1;
+        Width := Width - 5;
       if Height > Constraints.MinHeight then
-        Height := Height - 1;
+        Height := Height - 5;
     end
     else
     begin
@@ -105,20 +83,13 @@ end;
 
 procedure TForm1.Edit1EditingDone(Sender: TObject);
 var
-  NewWidth: Integer;
+  i: Integer;
 begin
-  if TryStrToInt(Edit1.Text, NewWidth) then
+  if TryStrToInt(Edit1.Text, i) then
   begin
-    if (NewWidth >= 500) and (NewWidth <= 1000) then
-    begin
-      Width := NewWidth;
-      PrevWidth := NewWidth;
-    end
-    else
-      Edit1.Text := IntToStr(PrevWidth);
-  end
-  else
-    Edit1.Text := IntToStr(PrevWidth);
+      Width:=i;
+  end;
+  Edit1.Text := IntToStr(Width);
 end;
 
 procedure TForm1.Button1Click(Sender: TObject);
@@ -143,26 +114,25 @@ end;
 
 procedure TForm1.Edit2EditingDone(Sender: TObject);
 var
-  NewHeight: Integer;
+  i: Integer;
 begin
-  if TryStrToInt(Edit2.Text, NewHeight) then
+  if TryStrToInt(Edit2.Text, i) then
   begin
-    if (NewHeight >= 100) and (NewHeight <= 500) then
-    begin
-      Height := NewHeight;
-      PrevHeight := NewHeight;
-    end
-    else
-      Edit2.Text := IntToStr(PrevHeight);
-  end
-  else
-    Edit2.Text := IntToStr(PrevHeight);
+      Height:=i;
+  end;
+  Edit2.Text := IntToStr(Height);
 end;
 
 procedure TForm1.FormChangeBounds(Sender: TObject);
 begin
   Left := (Screen.Width - Form1.Width) div 2;
   Top := (Screen.Height - Form1.Height) div 2;
+  Edit1.Text := IntToStr(Width);
+  Edit2.Text := IntToStr(Height);
+
+  Panel1.Left := (ClientWidth - Panel1.Width) div 2;
+  Panel1.Top := (ClientHeight - Panel1.Height) div 2;
 end;
 
 end.
+

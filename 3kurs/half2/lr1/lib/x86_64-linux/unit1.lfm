@@ -6,9 +6,9 @@ object Form1: TForm1
   Caption = 'неваляшка'
   ClientHeight = 100
   ClientWidth = 500
+  Color = clForm
   OnChangeBounds = FormChangeBounds
   OnCreate = FormCreate
-  OnResize = FormResize
   Position = poScreenCenter
   LCLVersion = '2.2.0.4'
   object Panel1: TPanel

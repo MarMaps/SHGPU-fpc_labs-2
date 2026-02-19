@@ -6,6 +6,7 @@ object Form1: TForm1
   Caption = 'неваляшка'
   ClientHeight = 100
   ClientWidth = 500
+  Color = clForm
   OnChangeBounds = FormChangeBounds
   OnCreate = FormCreate
   OnResize = FormResize
