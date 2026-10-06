@@ -15,7 +15,24 @@ type
 	id_person: ansistring;
 	fio_children: ansistring;
 	Achildren: array of ansistring;
+    end;
+    //п2
+    TDynArrayStream = class(TStream)
+    private
+           FData    : array of Byte;  //куда писать данные
+           FPosition: Int64;          // текущая позиция (как курсор в файле)
+    public
+      // Обязательные методы — без них класс останется абстрактным
+      function Read(var Buffer; Count: Longint): Longint; override;
+      function Write(const Buffer; Count: Longint): Longint; override;
+
+    // Seek нужен для работы Position, Size и т.д.
+      function Seek(const Offset: Int64; Origin: TSeekOrigin): Int64; override;
+
+    // Удобный метод: получить все данные как массив байт
+      function GetData: TBytes;
 end;
+
 
 var
     data: array of Tdata_people;
@@ -80,7 +97,7 @@ end;
 
 procedure inputData;  //ввод
 var
-  p: Tdata_people;//зачем эта переменная?
+  p: Tdata_people;
   s: AnsiString;
   i, k, dataLenght, childrenIDLenght: Integer;
 begin
@@ -157,6 +174,76 @@ begin
     end;
     writeln('======');
   end;
+end;
+
+//п2
+// --- ЗАПИСЬ в массив ---
+function TDynArrayStream.Write(const Buffer; Count: Longint): Longint;
+var
+  NewSize: Int64;
+begin
+  if Count <= 0 then
+  begin
+    Result := 0;
+    Exit;
+  end;
+
+  // Если данных не хватает — расширяем массив
+  NewSize := FPosition + Count;
+  if NewSize > Length(FData) then
+    SetLength(FData, NewSize);
+
+  // Копируем байты из Buffer в наш массив
+  Move(Buffer, FData[FPosition], Count);
+
+  FPosition := FPosition + Count;
+  Result := Count;
+end;
+
+// --- ЧТЕНИЕ из массива ---
+function TDynArrayStream.Read(var Buffer; Count: Longint): Longint;
+var
+  Available: Int64;
+begin
+  // Сколько байт реально можем прочитать (не выйти за границу)
+  Available := Int64(Length(FData)) - FPosition;
+  if Available <= 0 then
+  begin
+    Result := 0;
+    Exit;
+  end;
+
+  if Count > Available then
+    Count := Available;  // читаем не больше, чем есть
+
+  // Копируем байты из нашего массива в Buffer
+  Move(FData[FPosition], Buffer, Count);
+
+  FPosition := FPosition + Count;
+  Result := Count;
+end;
+
+// --- ПЕРЕМЕЩЕНИЕ позиции (как в файле) ---
+function TDynArrayStream.Seek(const Offset: Int64; Origin: TSeekOrigin): Int64;
+begin
+  case Origin of
+    soBeginning : FPosition := Offset;                         // от начала
+    soCurrent   : FPosition := FPosition + Offset;             // от текущего места
+    soEnd       : FPosition := Int64(Length(FData)) + Offset;  // от конца
+  end;
+
+  // Не выходим за границы
+  if FPosition < 0 then FPosition := 0;
+  if FPosition > Length(FData) then FPosition := Length(FData);
+
+  Result := FPosition;
+end;
+
+function TDynArrayStream.GetData: TBytes;
+begin
+  SetLength(Result, Length(FData));
+  if Length(FData) > 0 then
+    Move(FData[0], Result[0], Length(FData));
 end;
 
 end.
